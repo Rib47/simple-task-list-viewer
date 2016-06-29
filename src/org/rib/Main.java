@@ -28,6 +28,7 @@ public class Main extends Application {
     private static Button loadBtn;
     private static Button aggregateBtn;
     private static Button saveBtn;
+    private static Button exportBtn;
     private static Button compareBtn;
     private static Button clearBtn;
 
@@ -51,10 +52,13 @@ public class Main extends Application {
         compareBtn = new Button("Compare");
         compareBtn.setOnAction(new CompareButtonHandler());
 
+        exportBtn = new Button("Export to Excel");
+        exportBtn.setOnAction(new ExportButtonHandler());
+
         clearBtn = new Button("Clear list");
         clearBtn.setOnAction(new ClearButtonHandler());
 
-        setActiveButtons(true, false, false, false, false);
+        setActiveButtons(true, false, false, false, false, false);
 
         GridPane root = new GridPane();
         root.setHgap(8);
@@ -68,13 +72,14 @@ public class Main extends Application {
         compareView = new TableView<>();
         view.setVisible(false);
 
-        root.add(view, 0, 0, 5, 10);
-        root.add(compareView, 0, 0, 5, 10);
+        root.add(view, 0, 0, 6, 10);
+        root.add(compareView, 0, 0, 6, 10);
         root.add(loadBtn,       0, 11);
         root.add(aggregateBtn,  1, 11);
         root.add(saveBtn,       2, 11);
         root.add(compareBtn,    3, 11);
-        root.add(clearBtn,      4, 11);
+        root.add(exportBtn,    4, 11);
+        root.add(clearBtn,      5, 11);
         Scene scene = new Scene(root, 550, 700);
 
         primaryStage.setTitle("Simple Task List Viewer");
@@ -109,7 +114,7 @@ public class Main extends Application {
         view.setItems(items);
         view.getSortOrder().setAll(nameCol);
 
-        Main.setActiveButtons(true, true, false, false, true);
+        Main.setActiveButtons(true, true, false, false, true, true);
         showView();
     }
 
@@ -126,7 +131,7 @@ public class Main extends Application {
         view.setItems(items);
         view.getSortOrder().setAll(nameCol);
 
-        Main.setActiveButtons(true, false, true, true, true);
+        Main.setActiveButtons(true, false, true, true, true, true);
         showView();
     }
 
@@ -147,26 +152,27 @@ public class Main extends Application {
         compareView.setItems(items);
         compareView.getSortOrder().setAll(nameCol);
 
-        Main.setActiveButtons(true, false, false, true, true);
+        Main.setActiveButtons(true, false, false, true, true, false);
         showCompareView();
     }
 
     public static void clearTableView() {
         view.getColumns().clear();
         view.getItems().clear();
-        setActiveButtons(true, false, false, false, false);
+        setActiveButtons(true, false, false, false, false, false);
         showView();
         compareView.getColumns().clear();
         compareView.getItems().clear();
     }
 
     private static void setActiveButtons(boolean loadFlag, boolean aggregateFlag, boolean saveFlag,
-                                        boolean compareFlag, boolean clearFlag) {
+                                        boolean compareFlag, boolean clearFlag, boolean exportFlag) {
         loadBtn.setDisable(!loadFlag);
         aggregateBtn.setDisable(!aggregateFlag);
         saveBtn.setDisable(!saveFlag);
         compareBtn.setDisable(!compareFlag);
         clearBtn.setDisable(!clearFlag);
+        exportBtn.setDisable(!exportFlag);
     }
 
     private static void showView() {
@@ -186,22 +192,6 @@ public class Main extends Application {
 
     public static TableView<TaskDomain> getView() {
         return view;
-    }
-
-    public static Button getLoadBtn() {
-        return loadBtn;
-    }
-
-    public static Button getAggregateBtn() {
-        return aggregateBtn;
-    }
-
-    public static Button getSaveBtn() {
-        return saveBtn;
-    }
-
-    public static Button getCompareBtn() {
-        return compareBtn;
     }
 
     public static Stage getStage() {
